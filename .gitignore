@@ -1,2 +1,7 @@
-*.o
+*.rcgu.o
+*.bin
+*.rs.bk
+*.rlib
+*.rmeta
+*.d
 tlsn/tlsn/target/debug/
