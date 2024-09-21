@@ -31,12 +31,12 @@ function decode_file(filepath) {
 
     jsonData = convertToByteArray(jsonData);
     
-    output_data = JSON.stringify(jsonData);
+    // output_data = JSON.stringify(jsonData);
 
     // console.log(output_data);
     // console.log(new Blob([output_data]).size);
 
-    return output_data;
+    return jsonData;
 }
 
 module.exports = { decode_file };

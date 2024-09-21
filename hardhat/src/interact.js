@@ -1,7 +1,9 @@
 require('dotenv').config();
 const { ethers, randomBytes } = require('ethers');
+const { NonceManager } = require('@ethersproject/experimental');
 const fs = require('fs');
 const path = require('path');
+const { decode_file } = require('./utils/decode'); 
 
 // Load environment variables
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
@@ -23,26 +25,48 @@ const CONTRACT_ABI = contractJson.abi;
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
+const nonceManager = new NonceManager(wallet);
+
 // Create contract instance
-const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, nonceManager.connect(provider));
 
 async function main() {
   try {
-    // Example: Call a read-only function
-    console.log(contract.interface);
-    const someData = await contract.getNumberOfInputs('0xE2CA86422b06Cd89532aAb35b03E87de6c345159');
-    console.log('Read-only data:', someData);
+    // // Example: Call a read-only function
+    // console.log(contract.interface);
+    // const someData = await contract.getNumberOfInputs('0xE2CA86422b06Cd89532aAb35b03E87de6c345159');
+    // console.log('Read-only data:', someData);
 
-    // Example: Send a transaction to a write function
-    const randomData = randomBytes(32);
-    const txResponse = await contract.addInput('0xE2CA86422b06Cd89532aAb35b03E87de6c345159', randomData);
-    console.log('Transaction response:', txResponse);
+    auth_proof = decode_file('../tlsn/proof/auth_proof.json');
+    auth_proof = {
+        'username': 'mattbeton',
+        'proof': auth_proof,
+    }
+    auth_proof = {
+        'kind': 'ProofOfOwnership',
+        'payload': auth_proof,
+    }
+
+    user_proof = decode_file('../tlsn/proof/user_proof.json');
+    user_proof = {
+        'username': 'mattbeton',
+        'proof': user_proof,
+    }
+    user_proof = {
+        'kind': 'ProofOfTheNumberOfFollowers',
+        'payload': user_proof,
+    }
+
+    const txResponse1 = await contract.addInput('0xE2CA86422b06Cd89532aAb35b03E87de6c345159', ethers.toUtf8Bytes(JSON.stringify(auth_proof)));
+    console.log('Transaction response:', txResponse1);
+    const txResponse2 = await contract.addInput('0xE2CA86422b06Cd89532aAb35b03E87de6c345159', ethers.toUtf8Bytes(JSON.stringify(user_proof)));
+    console.log('Transaction response:', txResponse2);
 
     // // Wait for the transaction to be mined
-    // const txReceipt = await txResponse.wait();
-    // console.log('Transaction mined:', txReceipt);
-
-    // Further interactions or logic
+    const txReceipt1 = await txResponse1.wait();
+    console.log('Transaction mined:', txReceipt1);
+    const txReceipt2 = await txResponse2.wait();
+    console.log('Transaction mined:', txReceipt2);
   } catch (error) {
     console.error('Error interacting with the contract:', error);
   }
