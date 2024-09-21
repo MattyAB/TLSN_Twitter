@@ -5,8 +5,11 @@
     "hardhat": "^2.22.11"
   },
   "dependencies": {
+    "@chainlink/contracts": "^1.2.0",
+    "@chainlink/contracts-ccip": "^1.4.0",
     "@ethersproject/experimental": "^5.7.0",
-    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts": "^4.6.0",
+    "chainlink": "^0.8.2",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2"
   }

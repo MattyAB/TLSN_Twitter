@@ -32,11 +32,6 @@ const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, nonceManage
 
 async function main() {
   try {
-    // // Example: Call a read-only function
-    // console.log(contract.interface);
-    // const someData = await contract.getNumberOfInputs('0xE2CA86422b06Cd89532aAb35b03E87de6c345159');
-    // console.log('Read-only data:', someData);
-
     auth_proof = decode_file('../tlsn/proof/auth_proof.json');
     auth_proof = {
         'username': 'mattbeton',
