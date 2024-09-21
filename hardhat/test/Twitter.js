@@ -1,5 +1,7 @@
 const { expect } = require("chai");
 const { decode_file } = require('../src/utils/decode');
+const { ethers } = require("hardhat");
+const fs = require('fs');
 
 
 describe("Twitter Token Test", function () {
@@ -9,8 +11,14 @@ describe("Twitter Token Test", function () {
         // Retrieve the default account from ethers
         [owner] = await ethers.getSigners();
 
-        // Pull in the Cartesi ABIs.
+        // Pull in the Cartesi ABI.
+        const inputBoxAbi = JSON.parse(fs.readFileSync('../rollups-contracts/deployments/optimism_sepolia/InputBox.json', 'utf8'));
 
+        // Get contract factory and deploy the contract instance
+        const InputBoxFactory = new ethers.ContractFactory(inputBoxAbi, inputBytecode, owner);
+
+        // Deploy the contract locally
+        IInputBox = await InputBoxFactory.deploy();
         
 
         // A helper to get the contracts instance and deploy it locally
